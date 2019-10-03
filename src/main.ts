@@ -29,6 +29,7 @@ async function main() {
             throw Error('App Service Settings is not enabled. Please provide one of the following : App Settings or General Settings or Connection Strings.');
         }
 
+        // Validating parsed inputs
         if(AppSettings) {
             try {
                 var customApplicationSettings = JSON.parse(AppSettings);
