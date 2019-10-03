@@ -24,20 +24,10 @@ async function main() {
         let ConnectionStrings: string = core.getInput('connection-strings-json', {required: false});
         let ConfigurationSettings: string = core.getInput('general-settings-json', {required: false});
         let applicationURL: string;
-        
-        let endpoint: IAuthorizationHandler = await getHandler();
-        console.log("Got service connection details for Azure App Service: " + webAppName);
-		
-		let appDetails = await AzureResourceFilterUtility.getAppDetails(endpoint, webAppName);
-        let resourceGroupName = appDetails["resourceGroupName"];
-		console.log("Resource Group : "+ resourceGroupName);
 
         if(!AppSettings && !ConnectionStrings && !ConfigurationSettings) {
             throw Error('App Service Settings is not enabled. Please provide one of the following : App Settings or General Settings or Connection Strings.');
         }
-
-        let appService: AzureAppService = new AzureAppService(endpoint, resourceGroupName, webAppName, slotName);
-        let appServiceUtility: AzureAppServiceUtility = new AzureAppServiceUtility(appService);
 
         if(AppSettings) {
             try {
@@ -46,7 +36,6 @@ async function main() {
             catch (error) {
                 throw new Error('App Settings object is not a valid JSON');
             }
-            await appServiceUtility.updateAndMonitorAppSettings(customApplicationSettings, null);
         }
 
         if(ConnectionStrings) {
@@ -56,7 +45,6 @@ async function main() {
             catch (error) {
                 throw new Error('Connection Strings object is not a valid JSON');
             }
-            await appServiceUtility.updateConnectionStrings(customConnectionStrings);
         }
         
         if(ConfigurationSettings) {
@@ -66,6 +54,27 @@ async function main() {
             catch (error) {
                 throw new Error('General Configuration Settings object is not a valid Key Value pairs');
             }
+        }
+        
+        let endpoint: IAuthorizationHandler = await getHandler();
+        console.log("Got service connection details for Azure App Service: " + webAppName);
+
+		let appDetails = await AzureResourceFilterUtility.getAppDetails(endpoint, webAppName);
+        let resourceGroupName = appDetails["resourceGroupName"];
+		console.log("Resource Group : "+ resourceGroupName);
+
+        let appService: AzureAppService = new AzureAppService(endpoint, resourceGroupName, webAppName, slotName);
+        let appServiceUtility: AzureAppServiceUtility = new AzureAppServiceUtility(appService);
+
+        if(AppSettings) {
+            await appServiceUtility.updateAndMonitorAppSettings(customApplicationSettings, null);
+        }
+
+        if(ConnectionStrings) {
+            await appServiceUtility.updateConnectionStrings(customConnectionStrings);
+        }
+        
+        if(ConfigurationSettings) {
             await appServiceUtility.updateConfigurationSettings(customConfigurationSettings);
         }
 
