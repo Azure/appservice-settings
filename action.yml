@@ -1,0 +1,27 @@
+# app service settings action
+name: 'Azure App Service Settings'
+description: 'Configure Azure Apps with app settings, connection strings and other general configuration settings'
+inputs: 
+  app-name: # id of input
+    description: 'Name of the Azure Web App'
+    required: true
+  slot-name: #id of input
+    description: 'Name of an existing slot other than the production slot. Default value is production'
+    required: false
+  app-settings-json: #id of input
+    description: 'Application settings using the JSON syntax set as value of secret variable: APP_SETTINGS'
+    required: false
+  connection-strings-json: #id of input
+    description: 'Connection Strings using the JSON syntax set as value of secret variable: CONNECTION_STRINGS'
+    required: false
+  general-settings-json: #id of input
+    description: 'General configuration settings using dictionary syntax - Key Value pairs'
+    required: false
+outputs:
+  webapp-url: # id of output
+    description: 'URL to work with your webapp'
+branding:
+  color: 'blue'
+runs:
+  using: 'node12'
+  main: 'lib/main.js'
