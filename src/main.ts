@@ -27,7 +27,7 @@ async function main() {
         
         let endpoint: IAuthorizationHandler = await getHandler();
         console.log("Got service connection details for Azure App Service: " + webAppName);
-
+		
 		let appDetails = await AzureResourceFilterUtility.getAppDetails(endpoint, webAppName);
         let resourceGroupName = appDetails["resourceGroupName"];
 		console.log("Resource Group : "+ resourceGroupName);
