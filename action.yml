@@ -21,6 +21,7 @@ outputs:
   webapp-url: # id of output
     description: 'URL to work with your webapp'
 branding:
+  icon: 'webapp.svg'
   color: 'blue'
 runs:
   using: 'node12'
