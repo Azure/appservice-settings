@@ -1,6 +1,6 @@
-# GitHub Action for configuring to Azure App service Settings
+# GitHub Action for configuring Azure App service Settings
 
-With the Azure App Service Actions for GitHub, you can automate your workflow to deploy [Azure Web Apps](https://azure.microsoft.com/en-us/services/app-service/web/) and configure [App settings](https://docs.microsoft.com/en-us/azure/app-service/configure-common) using GitHub Actions.
+With the Azure App Service Actions for GitHub, you can automate your workflow to deploy [Azure Web Apps](https://azure.microsoft.com/en-us/services/app-service/web/) and configure [App settings](https://docs.microsoft.com/en-us/azure/app-service/configure-common).
 
 Get started today with a [free Azure account](https://azure.com/free/open-source)!
 
@@ -28,7 +28,7 @@ The definition of this Github Action is in [action.yml](https://github.com/Azure
 For using any sensitive data/secrets like Azure Service Principal, App Settings or Connection Strings within an Action, add them as [secrets](https://help.github.com/en/articles/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables) in the GitHub repository and then use them in the workflow.
 
 Follow the steps to configure the secrets:
-  * Define a new secret under your repository settings, Add secret menu
+  * Define a new secret under your repository **Settings** > **Secrets** > **Add a new secret** menu
   * Paste the contents of the below [az cli](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest) command as the value of secret variable, for example 'AZURE_CREDENTIALS'
 ```bash  
 
