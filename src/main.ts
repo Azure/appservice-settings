@@ -95,12 +95,10 @@ async function main() {
 }
 
 function maskValues(jsonContent) {
-    for (let key in jsonContent) {
-        if (jsonContent.hasOwnProperty(key)) {
-            let value = jsonContent[key];
-          core.setSecret(value);
-          maskValues(value);
-        }
+    for(let i = 0; i< Object.keys(jsonContent).length; i++) {
+        Object.keys(jsonContent[i]).forEach(key => {
+            core.setSecret(jsonContent[i][key]);
+        });
     }
 }
 
