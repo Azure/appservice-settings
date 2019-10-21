@@ -36,7 +36,7 @@ Follow the steps to configure the secrets:
                             --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group} \
                             --sdk-auth
                             
-  # Replace {subscription-id}, {resource-group} with the subscription, resource group details of the WebApp
+  # Replace {subscription-id}, {resource-group} and {app-name} with the subscription, resource group and name of the WebApp
   
   # The command should output a JSON object similar to this:
 
@@ -86,7 +86,7 @@ You could copy the existing App settings and make necessary changes or create a 
 ]
  ```
  
-### Sample workflow to build and deploy a Node.js Web app to Azure using publish profile
+### Sample workflow to configure settings on an Azure Web App
 
 ```yaml
 # .github/workflows/configureAppSettings.yml
