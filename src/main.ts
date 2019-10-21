@@ -1,11 +1,11 @@
 import * as core from '@actions/core';
 import * as crypto from "crypto";
 
-import { IAuthorizationHandler } from "azure-actions-webclient/lib/AuthHandler/IAuthorizationHandler";
-import { getHandler } from 'azure-actions-webclient/lib/AuthorizationHandlerFactory';
 import { AzureAppService } from 'azure-actions-appservice-rest/lib/Arm/azure-app-service';
 import { AzureAppServiceUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureAppServiceUtility';
 import { AzureResourceFilterUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureResourceFilterUtility';
+import { IAuthorizationHandler } from "azure-actions-webclient/lib/AuthHandler/IAuthorizationHandler";
+import { getHandler } from 'azure-actions-webclient/lib/AuthorizationHandlerFactory';
 
 var prefix = !!process.env.AZURE_HTTP_USER_AGENT ? `${process.env.AZURE_HTTP_USER_AGENT}` : "";
 
@@ -33,6 +33,7 @@ async function main() {
         if(AppSettings) {
             try {
                 var customApplicationSettings = JSON.parse(AppSettings);
+                maskValues(customApplicationSettings);
             }
             catch (error) {
                 throw new Error('App Settings object is not a valid JSON');
@@ -42,6 +43,7 @@ async function main() {
         if(ConnectionStrings) {
             try {
                 var customConnectionStrings = JSON.parse(ConnectionStrings);
+                maskValues(customConnectionStrings);
             }
             catch (error) {
                 throw new Error('Connection Strings object is not a valid JSON');
@@ -89,6 +91,12 @@ async function main() {
     finally {
         // Reset AZURE_HTTP_USER_AGENT
         core.exportVariable('AZURE_HTTP_USER_AGENT', prefix);
+    }
+}
+
+function maskValues(jsonContent) {
+    for(let i = 0; i< Object.keys(jsonContent).length; i++) {
+        core.setSecret(jsonContent[i].value);
     }
 }
 
