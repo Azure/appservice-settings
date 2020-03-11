@@ -78,13 +78,9 @@ export function validateSettings(customSettings: string) {
 }
 
 function maskValues(jsonContent) {
-    for (var value of Object.values(jsonContent)) {
-        core.setSecret(value.toString());
-        console.log(value.toString());
-    }
-    /*for(let i = 0; i< Object.keys(jsonContent).length; i++) {
+    for(let i = 0; i< Object.keys(jsonContent).length; i++) {
         core.setSecret(jsonContent[i].value);
-    }*/
+    }
 }
 
-//main();
+main();
