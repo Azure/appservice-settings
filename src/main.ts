@@ -58,6 +58,7 @@ export default async function main() {
         core.setOutput('webapp-url', applicationURL);
     }
     catch(error) {
+        console.log(JSON.stringify(error));
         core.setFailed(error);
     }
     finally {
