@@ -1,5 +1,5 @@
 import * as core from "@actions/core";
-import main, {validateSettings} from "../main";
+import {main, validateSettings} from "../main";
 
 import { AzureAppService } from 'azure-actions-appservice-rest/lib/Arm/azure-app-service';
 import { AzureAppServiceUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureAppServiceUtility';

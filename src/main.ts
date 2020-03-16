@@ -9,7 +9,7 @@ import { getHandler } from 'azure-actions-webclient/lib/AuthorizationHandlerFact
 
 var prefix = !!process.env.AZURE_HTTP_USER_AGENT ? `${process.env.AZURE_HTTP_USER_AGENT}` : "";
 
-export default async function main() {
+export async function main() {
 
     try {
 		// Set user agent variable
