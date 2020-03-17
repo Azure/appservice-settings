@@ -2,6 +2,7 @@ import * as core from "@actions/core";
 import {main, validateSettings} from "../main";
 
 import { AzureResourceFilterUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureResourceFilterUtility';
+import { AzureAppServiceUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureAppServiceUtility';
 
 jest.mock('@actions/core');
 jest.mock('azure-actions-appservice-rest/lib/Arm/azure-app-service');
@@ -52,6 +53,8 @@ describe('Test Azure App Service Settings', () => {
             kind: jsonObject['app-kind']
         });
 
+        let getApplicationURLSpy = jest.spyOn(AzureAppServiceUtility.prototype, 'getApplicationURL').mockResolvedValue('http://testurl');
+
         try {
             await main();
         }
@@ -61,6 +64,7 @@ describe('Test Azure App Service Settings', () => {
 
         expect(getInputSpy).toHaveBeenCalledTimes(5);
         expect(appDetails).toHaveBeenCalled();
+        expect(getApplicationURLSpy).toHaveBeenCalled();
     });
 
     it('Checks valid json', async() => {
@@ -72,7 +76,7 @@ describe('Test Azure App Service Settings', () => {
         }
         catch(e) { 
         }
-        
+
         expect(validateSettings).toHaveBeenCalledTimes(2);
         expect(validateSettings).toHaveReturnedTimes(2);
     })
