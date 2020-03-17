@@ -1,12 +1,7 @@
 import * as core from "@actions/core";
 import {main, validateSettings} from "../main";
 
-import { AzureAppService } from 'azure-actions-appservice-rest/lib/Arm/azure-app-service';
-import { AzureAppServiceUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureAppServiceUtility';
 import { AzureResourceFilterUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureResourceFilterUtility';
-import { IAuthorizationHandler } from 'azure-actions-webclient/lib/AuthHandler/IAuthorizationHandler';
-import { getHandler } from 'azure-actions-webclient/lib/AuthorizationHandlerFactory';
-import { resolve } from "dns";
 
 jest.mock('@actions/core');
 jest.mock('azure-actions-appservice-rest/lib/Arm/azure-app-service');
@@ -69,12 +64,17 @@ describe('Test Azure App Service Settings', () => {
     });
 
     it('Checks valid json', async() => {
+        const validateSettings = jest.fn();
+
         try {
-            validateSettings(JSON.stringify(jsonObject['connection-strings-json']));
-            validateSettings(JSON.stringify(jsonObject['app-settings-json']));
+            let connectionStrings = validateSettings(JSON.stringify(jsonObject['connection-strings-json']));
+            let appSettings = validateSettings(JSON.stringify(jsonObject['app-settings-json']));
         }
         catch(e) { 
         }
+        
+        expect(validateSettings).toHaveBeenCalledTimes(2);
+        expect(validateSettings).toHaveReturnedTimes(2);
     })
 
 });
