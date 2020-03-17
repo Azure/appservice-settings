@@ -19,6 +19,7 @@ jobs:
       run: |
         npm install
         npm run build
+
     - name: 'Run L0 tests'
       run: |
         npm run test
