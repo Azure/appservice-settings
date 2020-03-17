@@ -9,7 +9,7 @@ import { getHandler } from 'azure-actions-webclient/lib/AuthorizationHandlerFact
 
 var prefix = !!process.env.AZURE_HTTP_USER_AGENT ? `${process.env.AZURE_HTTP_USER_AGENT}` : "";
 
-async function main() {
+export async function main() {
 
     try {
 		// Set user agent variable
@@ -28,36 +28,6 @@ async function main() {
         if(!AppSettings && !ConnectionStrings && !ConfigurationSettings) {
             throw Error('App Service Settings is not enabled. Please provide one of the following : App Settings or General Settings or Connection Strings.');
         }
-
-        // Validating parsed inputs
-        if(AppSettings) {
-            try {
-                var customApplicationSettings = JSON.parse(AppSettings);
-                maskValues(customApplicationSettings);
-            }
-            catch (error) {
-                throw new Error('App Settings object is not a valid JSON');
-            }
-        }
-
-        if(ConnectionStrings) {
-            try {
-                var customConnectionStrings = JSON.parse(ConnectionStrings);
-                maskValues(customConnectionStrings);
-            }
-            catch (error) {
-                throw new Error('Connection Strings object is not a valid JSON');
-            }
-        }
-        
-        if(ConfigurationSettings) {
-            try {
-                var customConfigurationSettings = JSON.parse(ConfigurationSettings);
-            }
-            catch (error) {
-                throw new Error('General Configuration Settings object is not a valid Key Value pairs');
-            }
-        }
         
         let endpoint: IAuthorizationHandler = await getHandler();
         console.log("Got service connection details for Azure App Service: " + webAppName);
@@ -70,14 +40,17 @@ async function main() {
         let appServiceUtility: AzureAppServiceUtility = new AzureAppServiceUtility(appService);
 
         if(AppSettings) {
+            let customApplicationSettings = validateSettings(AppSettings);
             await appServiceUtility.updateAndMonitorAppSettings(customApplicationSettings, null);
         }
 
         if(ConnectionStrings) {
+            let customConnectionStrings = validateSettings(ConnectionStrings);
             await appServiceUtility.updateConnectionStrings(customConnectionStrings);
         }
         
         if(ConfigurationSettings) {
+            let customConfigurationSettings = validateSettings(ConfigurationSettings);
             await appServiceUtility.updateConfigurationSettings(customConfigurationSettings);
         }
 
@@ -91,6 +64,17 @@ async function main() {
     finally {
         // Reset AZURE_HTTP_USER_AGENT
         core.exportVariable('AZURE_HTTP_USER_AGENT', prefix);
+    }
+}
+
+export function validateSettings(customSettings: string) {
+    try {
+        var customParsedSettings = JSON.parse(customSettings);
+        maskValues(customParsedSettings);
+        return customParsedSettings;
+    }
+    catch (error) {
+        throw new Error('Given Settings object is not a valid JSON');
     }
 }
 
