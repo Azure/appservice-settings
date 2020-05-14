@@ -32,7 +32,7 @@ Follow the steps to configure the secrets:
   * Paste the contents of the below [az cli](https://docs.microsoft.com/en-us/cli/azure/?view=azure-cli-latest) command as the value of secret variable, for example 'AZURE_CREDENTIALS'
 ```bash  
 
-   az ad sp create-for-rbac --name "myApp" --role contributor \
+   az ad sp create-for-rbac --name {app-name} --role contributor \
                             --scopes /subscriptions/{subscription-id}/resourceGroups/{resource-group} \
                             --sdk-auth
                             
