@@ -8,7 +8,7 @@ This repository contains GitHub Action for [Azure App Service Settings](https://
 
 The action works for ASP.NET, ASP.NET Core, PHP, Java, Python, Go and Node.js based web applications.
 
-If you are looking for a Github Actions to deploy code or a customized image into an Azure Webapp, consider using [WebApps-deploy](https://github.com/Azure/webapps-deploy) or [webapps-container-deploy](https://github.com/Azure/webapps-container-deploy) actions.
+If you are looking for a Github Actions to deploy code or a customized image into an Azure Webapp, consider using [WebApps-deploy](https://github.com/Azure/webapps-deploy) action.
 
 The definition of this Github Action is in [action.yml](https://github.com/Azure/appservice-settings/blob/master/action.yml).
 
