@@ -36,6 +36,10 @@ var jsonObject = {
 
 describe('Test Azure App Service Settings', () => {
 
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
+
     afterEach(() => {
         jest.restoreAllMocks();
     })
@@ -110,7 +114,7 @@ describe('Test Azure App Service Settings', () => {
             console.log(e);
         }
 
-        expect(getInputSpy).toHaveBeenCalledTimes(5);
+        expect(getInputSpy).toHaveBeenCalledTimes(6);
         expect(appDetails).toHaveBeenCalled();
         expect(getApplicationURLSpy).toHaveBeenCalled();
         expect(validateSettingsSpy).toHaveBeenCalled();
