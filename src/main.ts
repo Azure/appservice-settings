@@ -53,7 +53,7 @@ export async function main() {
         }
         
         if(ConfigurationSettings) {
-            let customConfigurationSettings = Utils.validateSettings(ConfigurationSettings);
+            let customConfigurationSettings = Utils.validateSettings(ConfigurationSettings, maskInputs);
             await appServiceUtility.updateConfigurationSettings(customConfigurationSettings);
         }
 
