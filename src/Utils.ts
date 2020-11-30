@@ -1,10 +1,10 @@
 import * as core from '@actions/core';
 
 export class Utils {
-    static validateSettings(customSettings: string, maskInputs?: string) {
+    static validateSettings(customSettings: string, maskInputs: string) {
         try {
             var customParsedSettings = JSON.parse(customSettings);
-            if (!!maskInputs && maskInputs !== "false") {
+            if (maskInputs !== "false") {
                 Utils.maskValues(customParsedSettings);
             }
             return customParsedSettings;
