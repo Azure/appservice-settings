@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import * as crypto from "crypto";
 
+import { Utils } from  "./Utils";
 import { AzureAppService } from 'azure-actions-appservice-rest/lib/Arm/azure-app-service';
 import { AzureAppServiceUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureAppServiceUtility';
 import { AzureResourceFilterUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureResourceFilterUtility';
@@ -23,12 +24,14 @@ export async function main() {
         let AppSettings: string = core.getInput('app-settings-json', {required: false});
         let ConnectionStrings: string = core.getInput('connection-strings-json', {required: false});
         let ConfigurationSettings: string = core.getInput('general-settings-json', {required: false});
+        const maskInputs: string = core.getInput('mask-inputs', { required: false }).toLowerCase();
         let applicationURL: string;
 
         if(!AppSettings && !ConnectionStrings && !ConfigurationSettings) {
             throw Error('App Service Settings is not enabled. Please provide one of the following : App Settings or General Settings or Connection Strings.');
         }
-        
+
+        // Validating parsed inputs
         let endpoint: IAuthorizationHandler = await getHandler();
         console.log("Got service connection details for Azure App Service: " + webAppName);
 
@@ -40,17 +43,17 @@ export async function main() {
         let appServiceUtility: AzureAppServiceUtility = new AzureAppServiceUtility(appService);
 
         if(AppSettings) {
-            let customApplicationSettings = validateSettings(AppSettings);
+            let customApplicationSettings = Utils.validateSettings(AppSettings, maskInputs);
             await appServiceUtility.updateAndMonitorAppSettings(customApplicationSettings, null);
         }
 
         if(ConnectionStrings) {
-            let customConnectionStrings = validateSettings(ConnectionStrings);
+            let customConnectionStrings = Utils.validateSettings(ConnectionStrings, maskInputs);
             await appServiceUtility.updateConnectionStrings(customConnectionStrings);
         }
         
         if(ConfigurationSettings) {
-            let customConfigurationSettings = validateSettings(ConfigurationSettings);
+            let customConfigurationSettings = Utils.validateSettings(ConfigurationSettings, maskInputs);
             await appServiceUtility.updateConfigurationSettings(customConfigurationSettings);
         }
 
@@ -64,23 +67,6 @@ export async function main() {
     finally {
         // Reset AZURE_HTTP_USER_AGENT
         core.exportVariable('AZURE_HTTP_USER_AGENT', prefix);
-    }
-}
-
-export function validateSettings(customSettings: string) {
-    try {
-        var customParsedSettings = JSON.parse(customSettings);
-        maskValues(customParsedSettings);
-        return customParsedSettings;
-    }
-    catch (error) {
-        throw new Error('Given Settings object is not a valid JSON');
-    }
-}
-
-function maskValues(jsonContent) {
-    for(let i = 0; i< Object.keys(jsonContent).length; i++) {
-        core.setSecret(jsonContent[i].value);
     }
 }
 

@@ -17,6 +17,10 @@ inputs:
   general-settings-json: #id of input
     description: 'General configuration settings using dictionary syntax - Key Value pairs'
     required: false
+  mask-inputs: 
+    description: 'Set it to false if you want to provide input jsons as plain text/you do not want input json values to be masked. This will apply to all input jsons. Default is true'
+    required: false
+    default: true
 outputs:
   webapp-url: # id of output
     description: 'URL to work with your webapp'

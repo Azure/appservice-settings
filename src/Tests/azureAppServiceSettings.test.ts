@@ -1,5 +1,6 @@
 import * as core from "@actions/core";
-import {main, validateSettings} from "../main";
+import { main } from "../main";
+import { Utils } from  "../Utils";
 
 import { AzureResourceFilterUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureResourceFilterUtility';
 import { AzureAppServiceUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureAppServiceUtility';
@@ -14,6 +15,7 @@ jest.mock('azure-actions-appservice-rest/lib/Utilities/AzureAppServiceUtility');
 var jsonObject = {
     'app-name': 'MOCK_APP_NAME',
     'resource-group-name' : 'MOCK_RESOURCE_GROUP',
+    'mask-inputs': 'false',
     'app-kind' : 'MOCK_APP_KIND',
     'app-settings-json': `[
         {
@@ -33,6 +35,10 @@ var jsonObject = {
 };
 
 describe('Test Azure App Service Settings', () => {
+
+    beforeEach(() => {
+        jest.clearAllMocks();
+    });
 
     afterEach(() => {
         jest.restoreAllMocks();
@@ -62,7 +68,7 @@ describe('Test Azure App Service Settings', () => {
             console.log(e);
         }
 
-        expect(getInputSpy).toHaveBeenCalledTimes(5);
+        expect(getInputSpy).toHaveBeenCalledTimes(6);
         expect(appDetails).toHaveBeenCalled();
         expect(getApplicationURLSpy).toHaveBeenCalled();
     });
@@ -79,6 +85,40 @@ describe('Test Azure App Service Settings', () => {
 
         expect(validateSettings).toHaveBeenCalledTimes(2);
         expect(validateSettings).toHaveReturnedTimes(2);
-    })
+    });
+
+    it("do not set inputs as secrets if mask-inputs is false", async () => {
+        
+        let getInputSpy = jest.spyOn(core, 'getInput').mockImplementation((name, options) => {
+            switch(name) {
+                case 'app-name': return jsonObject['app-name'];
+                case 'connection-strings-json' : return jsonObject['connection-strings-json'];
+                case 'mask-inputs': return jsonObject['mask-inputs'];
+            }
+            return '';
+        });
+
+        let appDetails = jest.spyOn(AzureResourceFilterUtility, 'getAppDetails').mockResolvedValue({
+            resourceGroupName: jsonObject['resource-group-name'],
+            kind: jsonObject['app-kind']
+        });
+
+        let getApplicationURLSpy = jest.spyOn(AzureAppServiceUtility.prototype, 'getApplicationURL').mockResolvedValue('http://testurl');
+        let validateSettingsSpy = jest.spyOn(Utils, 'validateSettings');
+        let maskValuesSpy = jest.spyOn(Utils, 'maskValues');
+
+        try {
+            await main();
+        }
+        catch(e) {
+            console.log(e);
+        }
+
+        expect(getInputSpy).toHaveBeenCalledTimes(6);
+        expect(appDetails).toHaveBeenCalled();
+        expect(getApplicationURLSpy).toHaveBeenCalled();
+        expect(validateSettingsSpy).toHaveBeenCalled();
+        expect(maskValuesSpy).not.toHaveBeenCalled();
+    });
 
 });
