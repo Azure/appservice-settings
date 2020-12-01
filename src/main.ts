@@ -24,7 +24,7 @@ export async function main() {
         let AppSettings: string = core.getInput('app-settings-json', {required: false});
         let ConnectionStrings: string = core.getInput('connection-strings-json', {required: false});
         let ConfigurationSettings: string = core.getInput('general-settings-json', {required: false});
-        const maskInputs: string = core.getInput('mask-inputs', { required: false });
+        const maskInputs: string = core.getInput('mask-inputs', { required: false }).toLowerCase();
         let applicationURL: string;
 
         if(!AppSettings && !ConnectionStrings && !ConfigurationSettings) {
