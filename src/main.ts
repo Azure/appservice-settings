@@ -1,6 +1,7 @@
 import * as core from '@actions/core';
 import * as crypto from "crypto";
 
+import { Utils } from  "./Utils";
 import { AzureAppService } from 'azure-actions-appservice-rest/lib/Arm/azure-app-service';
 import { AzureAppServiceUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureAppServiceUtility';
 import { AzureResourceFilterUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureResourceFilterUtility';
@@ -23,6 +24,7 @@ async function main() {
         let AppSettings: string = core.getInput('app-settings-json', {required: false});
         let ConnectionStrings: string = core.getInput('connection-strings-json', {required: false});
         let ConfigurationSettings: string = core.getInput('general-settings-json', {required: false});
+        const maskInputs: string = core.getInput('mask-inputs', { required: false }).toLowerCase();
         let applicationURL: string;
 
         if(!AppSettings && !ConnectionStrings && !ConfigurationSettings) {
@@ -30,35 +32,6 @@ async function main() {
         }
 
         // Validating parsed inputs
-        if(AppSettings) {
-            try {
-                var customApplicationSettings = JSON.parse(AppSettings);
-                maskValues(customApplicationSettings);
-            }
-            catch (error) {
-                throw new Error('App Settings object is not a valid JSON');
-            }
-        }
-
-        if(ConnectionStrings) {
-            try {
-                var customConnectionStrings = JSON.parse(ConnectionStrings);
-                maskValues(customConnectionStrings);
-            }
-            catch (error) {
-                throw new Error('Connection Strings object is not a valid JSON');
-            }
-        }
-        
-        if(ConfigurationSettings) {
-            try {
-                var customConfigurationSettings = JSON.parse(ConfigurationSettings);
-            }
-            catch (error) {
-                throw new Error('General Configuration Settings object is not a valid Key Value pairs');
-            }
-        }
-        
         let endpoint: IAuthorizationHandler = await getHandler();
         console.log("Got service connection details for Azure App Service: " + webAppName);
 
@@ -70,14 +43,17 @@ async function main() {
         let appServiceUtility: AzureAppServiceUtility = new AzureAppServiceUtility(appService);
 
         if(AppSettings) {
+            let customApplicationSettings = Utils.validateSettings(AppSettings, maskInputs);
             await appServiceUtility.updateAndMonitorAppSettings(customApplicationSettings, null);
         }
 
         if(ConnectionStrings) {
+            let customConnectionStrings = Utils.validateSettings(ConnectionStrings, maskInputs);
             await appServiceUtility.updateConnectionStrings(customConnectionStrings);
         }
         
         if(ConfigurationSettings) {
+            let customConfigurationSettings = Utils.validateSettings(ConfigurationSettings, maskInputs);
             await appServiceUtility.updateConfigurationSettings(customConfigurationSettings);
         }
 
@@ -91,12 +67,6 @@ async function main() {
     finally {
         // Reset AZURE_HTTP_USER_AGENT
         core.exportVariable('AZURE_HTTP_USER_AGENT', prefix);
-    }
-}
-
-function maskValues(jsonContent) {
-    for(let i = 0; i< Object.keys(jsonContent).length; i++) {
-        core.setSecret(jsonContent[i].value);
     }
 }
 
