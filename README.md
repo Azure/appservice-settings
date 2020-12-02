@@ -25,7 +25,7 @@ The definition of this Github Action is in [action.yml](https://github.com/Azure
 4. Commit and push your project to GitHub repository, you should see a new GitHub Action initiated in **Actions** tab.
 
 ## Configure GitHub Secrets with Azure Credentials, App Settings and Connection Strings
-For using any sensitive data/secrets like Azure Service Principal, App Settings or Connection Strings within an Action, add them as [secrets](https://help.github.com/en/articles/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables) in the GitHub repository and then use them in the workflow. If you do not have sensitive information in the settings json and do not want to set it as secret, set `mask-inputs` as false in the workflow. By default, `mask-inputs` will be true. If `mask-inputs: false` is not provided, app-settings-json, connection-strings-json and general-settings-json will be set as secrets and masked in logs.
+For using any sensitive data/secrets like Azure Service Principal, App Settings or Connection Strings within an Action, add them as [secrets](https://help.github.com/en/articles/virtual-environments-for-github-actions#creating-and-using-secrets-encrypted-variables) in the GitHub repository and then use them in the workflow. If you do not have sensitive information in the app-settings -json and connection-strings-json and do not want to set it as secret, set `mask-inputs` as false in the workflow. By default, `mask-inputs` will be true. If `mask-inputs: false` is not provided, app-settings-json and connection-strings-json will be set as secrets and masked in logs. `mask-inputs` is not applicable to general-settings-json.
 
 Follow the steps to configure the secrets:
   * Define a new secret under your repository **Settings** > **Secrets** > **Add a new secret** menu
@@ -130,7 +130,6 @@ jobs:
         mask-inputs: false
         slot-name: 'staging'  # Optional and needed only if the settings have to be configured on the specific deployment slot
         app-settings-json: '[{ "name": "SCM_DO_BUILD_DURING_DEPLOYMENT", "value": "1", "slotSetting": false }]'
-        general-settings-json: '{"alwaysOn": "false", "webSocketsEnabled": "true"}' #'General configuration settings as Key Value pairs'
       id: settings
     - run: echo "The webapp-url is ${{ steps.settings.outputs.webapp-url }}"
     - run: |
