@@ -136,6 +136,7 @@ jobs:
         az logout
  ```
 
+Azure App Service Actions is supported on both 'AzureUSGovernment' or 'AzureChinaCloud'.Login to the respective Azure Cloud before running  Azure App Service Actions using [Azure Login](https://github.com/Azure/login)
 
 # Contributing
 
