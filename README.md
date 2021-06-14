@@ -1,8 +1,8 @@
-# GitHub Action for configuring Azure App service Settings
+# GitHub Action for configuring Azure App service Settings DUMMY
 
 With the Azure App Service Actions for GitHub, you can automate your workflow to deploy [Azure Web Apps](https://azure.microsoft.com/en-us/services/app-service/web/) and configure [App settings](https://docs.microsoft.com/en-us/azure/app-service/configure-common).
 
-Get started today with a [free Azure account](https://azure.com/free/open-source)!
+Get started today with a [free Azure account](https://azure.com/free/open-source)! 
 
 This repository contains GitHub Action for [Azure App Service Settings](https://github.com/Azure/appservice-settings) to configure App settings, connection strings and other general settings in bulk using JSON syntax on your Azure WebApp (Windows or Linux) or any of its deployment slots. 
 
