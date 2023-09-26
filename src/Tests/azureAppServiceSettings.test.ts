@@ -6,11 +6,11 @@ import { AzureResourceFilterUtility } from 'azure-actions-appservice-rest/Utilit
 import { AzureAppServiceUtility } from 'azure-actions-appservice-rest/Utilities/AzureAppServiceUtility';
 
 jest.mock('@actions/core');
-jest.mock('azure-actions-appservice-rest/lib/Arm/azure-app-service');
-jest.mock('azure-actions-webclient/lib/AuthorizationHandlerFactory');
-jest.mock('azure-actions-appservice-rest/lib/Utilities/AzureResourceFilterUtility');
-jest.mock('azure-actions-webclient/lib/AuthHandler/IAuthorizationHandler');
-jest.mock('azure-actions-appservice-rest/lib/Utilities/AzureAppServiceUtility');
+jest.mock('azure-actions-appservice-rest/Arm/azure-app-service');
+jest.mock('azure-actions-webclient/AuthorizerFactory');
+jest.mock('azure-actions-appservice-rest/Utilities/AzureResourceFilterUtility');
+jest.mock('azure-actions-webclient/Authorizer/IAuthorizer');
+jest.mock('azure-actions-appservice-rest/Utilities/AzureAppServiceUtility');
 
 var jsonObject = {
     'app-name': 'MOCK_APP_NAME',
