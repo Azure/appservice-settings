@@ -2,8 +2,8 @@ import * as core from "@actions/core";
 import { main } from "../main";
 import { Utils } from  "../Utils";
 
-import { AzureResourceFilterUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureResourceFilterUtility';
-import { AzureAppServiceUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureAppServiceUtility';
+import { AzureResourceFilterUtility } from 'azure-actions-appservice-rest/Utilities/AzureResourceFilterUtility';
+import { AzureAppServiceUtility } from 'azure-actions-appservice-rest/Utilities/AzureAppServiceUtility';
 
 jest.mock('@actions/core');
 jest.mock('azure-actions-appservice-rest/lib/Arm/azure-app-service');

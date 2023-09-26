@@ -2,11 +2,11 @@ import * as core from '@actions/core';
 import * as crypto from "crypto";
 
 import { Utils } from  "./Utils";
-import { AzureAppService } from 'azure-actions-appservice-rest/lib/Arm/azure-app-service';
-import { AzureAppServiceUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureAppServiceUtility';
-import { AzureResourceFilterUtility } from 'azure-actions-appservice-rest/lib/Utilities/AzureResourceFilterUtility';
-import { IAuthorizationHandler } from "azure-actions-webclient/lib/AuthHandler/IAuthorizationHandler";
-import { getHandler } from 'azure-actions-webclient/lib/AuthorizationHandlerFactory';
+import { AzureAppService } from 'azure-actions-appservice-rest/Arm/azure-app-service';
+import { AzureAppServiceUtility } from 'azure-actions-appservice-rest/Utilities/AzureAppServiceUtility';
+import { AzureResourceFilterUtility } from 'azure-actions-appservice-rest/Utilities/AzureResourceFilterUtility';
+import { IAuthorizer } from 'azure-actions-webclient/Authorizer/IAuthorizer'
+import { AuthorizerFactory } from 'azure-actions-webclient/AuthorizerFactory';
 
 var prefix = !!process.env.AZURE_HTTP_USER_AGENT ? `${process.env.AZURE_HTTP_USER_AGENT}` : "";
 
@@ -32,7 +32,7 @@ export async function main() {
         }
 
         // Validating parsed inputs
-        let endpoint: IAuthorizationHandler = await getHandler();
+        let endpoint: IAuthorizer = await AuthorizerFactory.getAuthorizer();
         console.log("Got service connection details for Azure App Service: " + webAppName);
 
 		let appDetails = await AzureResourceFilterUtility.getAppDetails(endpoint, webAppName);
