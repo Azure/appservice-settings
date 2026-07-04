@@ -9,13 +9,13 @@ inputs:
     description: 'Name of an existing slot other than the production slot. Default value is production'
     required: false
   app-settings-json: #id of input
-    description: 'Application settings using the JSON syntax set as value of secret variable: APP_SETTINGS'
+    description: 'Application settings JSON. Supports one JSON array or multiple JSON arrays separated by --- lines. Duplicate setting names use last-write-wins.'
     required: false
   connection-strings-json: #id of input
-    description: 'Connection Strings using the JSON syntax set as value of secret variable: CONNECTION_STRINGS'
+    description: 'Connection strings JSON. Supports one JSON array or multiple JSON arrays separated by --- lines. Duplicate connection string names use last-write-wins.'
     required: false
   general-settings-json: #id of input
-    description: 'General configuration settings using dictionary syntax - Key Value pairs'
+    description: 'General configuration settings JSON object. Supports one JSON object or multiple JSON objects separated by --- lines. Duplicate keys use last-write-wins.'
     required: false
   mask-inputs: 
     description: 'Set it to false if you want to provide input jsons as plain text/you do not want input json values to be masked. This will apply to app-settings-json and connection-strings-json. Default is true'
