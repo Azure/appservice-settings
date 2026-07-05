@@ -43,17 +43,17 @@ export async function main() {
         let appServiceUtility: AzureAppServiceUtility = new AzureAppServiceUtility(appService);
 
         if(AppSettings) {
-            let customApplicationSettings = Utils.validateSettings(AppSettings, maskInputs);
+            let customApplicationSettings = Utils.getMergedAppSettings(AppSettings, maskInputs);
             await appServiceUtility.updateAndMonitorAppSettings(customApplicationSettings, null);
         }
 
         if(ConnectionStrings) {
-            let customConnectionStrings = Utils.validateSettings(ConnectionStrings, maskInputs);
+            let customConnectionStrings = Utils.getMergedConnectionStrings(ConnectionStrings, maskInputs);
             await appServiceUtility.updateConnectionStrings(customConnectionStrings);
         }
         
         if(ConfigurationSettings) {
-            let customConfigurationSettings = Utils.validateSettings(ConfigurationSettings);
+            let customConfigurationSettings = Utils.getMergedConfigurationSettings(ConfigurationSettings);
             await appServiceUtility.updateConfigurationSettings(customConfigurationSettings);
         }
 

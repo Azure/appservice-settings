@@ -136,6 +136,45 @@ jobs:
         az logout
  ```
 
+### Sample workflow to configure settings from multiple secrets or variables
+You can provide multiple JSON payloads in the same input by separating each payload with a line containing `---`.
+
+- For `app-settings-json` and `connection-strings-json`, each payload must be a JSON array.
+- For `general-settings-json`, each payload must be a JSON object.
+- Duplicate names/keys are resolved with last-write-wins.
+
+```yaml
+# .github/workflows/configureAppSettings.yml
+on: [push]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+    - uses: azure/login@v1
+      with:
+        creds: '${{ secrets.AZURE_CREDENTIALS }}'
+    - uses: azure/appservice-settings@v1
+      with:
+        app-name: 'my-app'
+        app-settings-json: |
+          ${{ secrets.APP_SETTINGS_BASE }}
+          ---
+          ${{ secrets.APP_SETTINGS_FEATURE_FLAGS }}
+        connection-strings-json: |
+          ${{ secrets.CONNECTION_STRINGS_SHARED }}
+          ---
+          ${{ secrets.CONNECTION_STRINGS_STAGING }}
+        general-settings-json: |
+          ${{ vars.GENERAL_SETTINGS_BASE }}
+          ---
+          ${{ vars.GENERAL_SETTINGS_OVERRIDE }}
+      id: settings
+    - run: echo "The webapp-url is ${{ steps.settings.outputs.webapp-url }}"
+    - run: |
+        az logout
+```
+
 Azure App Service Settings Action is supported for the Azure public cloud as well as Azure government clouds ('AzureUSGovernment' or 'AzureChinaCloud') and Azure Stack ('AzureStack') Hub. Before running this action, login to the respective Azure Cloud  using [Azure Login](https://github.com/Azure/login) by setting appropriate value for the `environment` parameter.
 
 # Contributing
